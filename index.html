@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>VueRouterテスト</title>
+</head>
+<body>
+
+<div id="app" class="l-wrapper">
+	<router-view name="header" class="l-header"></router-view>
+	<router-view name="content" class="l-content"></router-view>
+</div>
+
+<script type="text/x-template" id="tmpl-header">
+	<div class="l-header-inner">
+		ヘッダーです
+	</div>
+</script>
+<script type="text/x-template" id="tmpl-index">
+	<div class="l-content-inner">
+		インデックス<br>
+		<router-link to="/page/1">1ページめ</router-link><br>
+		<router-link :to="{ name: 'page', params: { id: 2 }}">2ページめ</router-link>
+	</div>
+</script>
+
+<script type="text/x-template" id="tmpl-page">
+	<div class="l-content-inner">
+		ページ{{ $route.params.id }}
+	</div>
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router@3.0.1/dist/vue-router.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

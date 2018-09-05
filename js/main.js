@@ -27,10 +27,6 @@
 			{
 				name:'index',
 				path: '/',
-				meta:{
-					title:'トップ',
-					desc:'トップページです'
-				},
 				components: {
 					header:header,
 					content:index
@@ -43,10 +39,6 @@
 			{
 				name:'page',
 				path: '/page/:id',
-				meta:{
-					title:'個別ページ:id',
-					desc:'個別ページです'
-				},
 				components: {
 					header:header,
 					content:page
@@ -66,40 +58,30 @@
 		}
 	});
 
-	const app = new Vue({
-		el:'#app',
-		router:router,
-		mounted: function(){
-			var to = this.$route;
-			console.log('mounted',to);
-			this.createMeta(to);
-		},
-		watch: {
-			'$route' (to, from) {
-				console.log('watch',to);
-				this.createMeta(to);
+	function setMeta(to){
+		var setMetaOf = {
+			index:function(to){
+				document.title = 'インデックス';
+				document.querySelector("meta[name='description']").setAttribute('content', 'インデックスのdesc');
+			},
+			page:function(to){
+				console.log(to);
+				document.title = to.params.id+'ページめ';
+				document.querySelector("meta[name='description']").setAttribute('content', to.params.id+'めページのdesc');
 			}
-		},
-		methods:{
-			createMeta : function(to){
-				// タイトルを設定
-				if(to.meta.title){
-					var setTitle = to.meta.title + ' | サイト名';
-					document.title = setTitle;
-				} else {
-					document.title = 'サイト名'
-				}
-
-				// メタタグdescription設定
-				if(to.meta.desc){
-					var setDesc = to.meta.desc;
-					document.querySelector("meta[name='description']").setAttribute('content', setDesc)
-				} else {
-					document.querySelector("meta[name='description']").setAttribute('content', '')
-				}
-			}
+		};
+		setMetaOf[to.name] && setMetaOf[to.name](to);
 	}
 
+	router.beforeEach(function(to,from,next){
+		console.log('beforeEach',to.name);
+		setMeta(to);
+		next();
+	});
+
+	const app = new Vue({
+		el:'#app',
+		router:router
 	});
 
 }).call(this);
